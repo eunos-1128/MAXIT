@@ -1,0 +1,86 @@
+
+             Installation and Usage Notes for the Maxit Application
+
+The MAXIT Program Suite was developed by the PDB (Protein Data Bank) to assist in the
+processing and curation of macromolecular structure data. It reads and writes PDB and
+mmCIF format files, and translates between file formats.
+
+
+1.  Building the Application and Installation
+
+a.  Uncompress and unbundle the distribution using the following command:
+
+        zcat maxit-v11.200-prod-src.tar.gz | tar -xf -
+
+    The result of this command is a subdirectory maxit-v11.200-prod-src in the current
+    directory. It contains subdirectories of various source modules and the following
+    items important for the user:
+
+        bin  - subdirectory in which the application executable "maxit" will be placed
+               after the build process.
+        data - subdirectory that contains some data files needed by the application.
+
+
+b.  Position in the maxit-v11.200-prod-src directory and run "make" command:
+
+        cd maxit-v11.200-prod-src
+        make binary
+
+    The application executable "maxit" will be placed in the "bin" subdirectory.
+
+
+c.  Set up the environment variables.
+
+    - Define RCSBROOT environment variable to point to the installation directory.
+
+      Assuming that the installation directory is /home/username/maxit-v11.200-prod-src,
+      execute in the shell:
+
+        For C shell users:
+          setenv RCSBROOT /home/username/maxit-v11.200-prod-src
+
+        For Bourne shell users:
+          RCSBROOT=/home/username/maxit-v11.200-prod-src; export RCSBROOT
+
+    - Add "bin" subdirectory to the PATH environment variable.
+
+      Execute in the shell:
+
+        For C shell users:
+          setenv PATH "$RCSBROOT/bin:"$PATH
+
+        For Bourne shell users:
+          PATH="$RCSBROOT/bin:"$PATH; export PATH
+
+
+2. Application Usage Notes
+
+a. Translating a PDB format file into mmCIF format file:
+
+    maxit -input file_name.pdb -output file_name.cif -o 1 -log logfile
+
+
+b. Translating  a mmCIF format file into PDB format file:
+
+    maxit -input file_name.cif -output file_name.pdb -o 2 -log logfile
+
+
+c. Updating a mmCIF format file:
+
+    maxit -input file_name.cif -output new_file_name.pdb -o 8 -log logfile
+
+d. Processing a PDB or mmCIF format entry:
+
+    process_entry -input inputfile -input_format pdb/cif -output outputfile -output_format pdb/cif -log logfile [ -keep_original_numbering ]
+
+    The "process_entry" program reads PDB or mmCIF format input file, processes the entry, and writes out PDB or mmCIF file. By default, the
+    program automatically re-assigns PDB chain ID(s) and numbering for ligand(s) and/or water if they exist. If the additional option
+    " -keep_original_numbering " is used, the program checks the PDB numbering first. If the entry has the unique PDB numbering and ligand(s)
+    and/or water have proper PDB chain ID(s) with associated polymer(s), program keeps the original numbering schema. Otherwise program over
+    writes " -keep_original_numbering " option and automatically re-assigns PDB chain ID(s) and numbering for ligand(s) and/or water.
+
+e. Generate biological assembly file from PDB mmCIF format file:
+
+   generate_assembly_cif_file -input file_name.cif -output output_file_name_prefix
+
+   (For example, generate_assembly_cif_file -input 4hhb.cif -output 4hhb)
